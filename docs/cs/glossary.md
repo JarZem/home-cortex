@@ -74,6 +74,14 @@
 
 [PROVISIONAL] Odvozená činnost probíhající v určitém kontextu, například práce, spánek, sledování televize nebo přesun mezi prostory.
 
+### Perception
+
+[PROVISIONAL] Odhad toho, jak konkrétní `Person` v daném `Context` subjektivně vnímá určitý fyzický stav nebo podmínku. `Perception` není fyzikální veličina ani obecná vlastnost prostoru a může se lišit mezi osobami i u stejné osoby podle činnosti, předchozího stavu, času a dalších okolností.
+
+### Preference
+
+[PROVISIONAL] Individuální a kontextově závislá informace o tom, jaký stav nebo rozsah podmínek konkrétní `Person` v dané situaci preferuje. `Preference` se může v čase měnit a může být explicitně sdělena, odvozena z chování nebo postupně naučena; její původ a `Confidence` musí být rozlišitelné.
+
 ### Intent
 
 [PROVISIONAL] Odhad toho, čeho chce osoba nebo systém v daném `Context` dosáhnout. `Intent` nesmí být zaměňován s přímo pozorovanou skutečností.
@@ -104,4 +112,4 @@
 
 ## Otevřené pojmy
 
-[TODO-DESIGN] Slovník bude průběžně rozšiřován. Zejména bude potřeba přesně definovat pojmy pro prostorový model domu, zařízení, schopnosti zařízení, příkaz, původ příkazu, korelaci událostí, časovou platnost, kvalitu dat, hypotézu, odvozený stav, aktivní měření, člověkem potvrzenou pravdu a trénovací vzorek.
+[TODO-DESIGN] Slovník bude průběžně rozšiřován. Zejména bude potřeba přesně definovat pojmy pro prostorový model domu, zařízení, schopnosti zařízení, příkaz, původ příkazu, korelaci událostí, časovou platnost, kvalitu dat, hypotézu, odvozený stav, aktivní měření, člověkem potvrzenou pravdu, osobní časově-kontextový profil a trénovací vzorek.
