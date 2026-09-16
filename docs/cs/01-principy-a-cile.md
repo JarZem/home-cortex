@@ -20,6 +20,18 @@ Aktuální vyhodnocený stav tohoto modelu označujeme jako `World State`.
 
 [FIXED] `World State` nemusí být znám s absolutní jistotou. Odvozené skutečnosti musí být možné reprezentovat spolu s jejich `Confidence`, původem a podpůrnými `Evidence`.
 
+## Očekávaný a pozorovaný svět
+
+[FIXED] **Home Cortex musí rozlišovat mezi tím, jaký stav světa očekává na základě modelu, a tím, jaký stav světa vyplývá z aktuálních `Observation`. Rozdíl mezi očekáváním a pozorováním je sám o sobě `Evidence`.**
+
+`World Model` může vytvářet `Expectation` o současném stavu a `Prediction` o možném budoucím stavu. Tyto výsledky nesmí být zaměněny za přímo pozorovanou skutečnost.
+
+Pokud se očekávaný a pozorovaný stav významně liší, vzniká `Discrepancy`. `Discrepancy` není automaticky důkazem poruchy. Může znamenat chybný nebo neúplný model, neočekávanou vnější podmínku, vadné či nevhodně interpretované měření nebo dosud neznámou příčinu. Samotný rozpor je však novou `Evidence`, kterou musí být možné dále vyhodnotit.
+
+Příklad: astronomický model může spolehlivě určit, že je Slunce nad horizontem, ale z toho nevyplývá skutečná úroveň osvětlení. Bouřka, oblačnost, mlha, okolní překážky nebo jiné podmínky mohou způsobit, že pozorované světelné podmínky výrazně neodpovídají jednoduchému očekávání založenému pouze na poloze Slunce.
+
+[TODO-DESIGN] Bude nutné přesně definovat vztahy mezi `Expectation`, `Prediction`, `Observation`, `Evidence`, `Discrepancy`, `Confidence` a časovou platností těchto tvrzení.
+
 ## Historie je součástí porozumění
 
 [FIXED] Pro Home Cortex není důležitý pouze současný stav, ale také způsob, jakým tento stav vznikl.
