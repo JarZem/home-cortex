@@ -32,6 +32,20 @@ Příklad: astronomický model může spolehlivě určit, že je Slunce nad hori
 
 [TODO-DESIGN] Bude nutné přesně definovat vztahy mezi `Expectation`, `Prediction`, `Observation`, `Evidence`, `Discrepancy`, `Confidence` a časovou platností těchto tvrzení.
 
+## Fyzický stav, vnímání a preference člověka
+
+[FIXED] **Home Cortex musí oddělovat objektivně popisované vlastnosti světa od jejich subjektivního vnímání a preferencí jednotlivých osob. Stejný fyzický `World State` může pro různé osoby vytvářet rozdílné `Perception` a vést k rozdílným potřebám.**
+
+Fyzikální veličina sama o sobě neurčuje lidský komfort ani požadovanou reakci systému. Například stejná teplota může být jednou osobou vnímána jako příjemná a jinou jako chladná. Vnímání stejné osoby se navíc může měnit podle jejího aktuálního stavu a `Context`, například po koupeli, při fyzické aktivitě nebo po dlouhém nehybném sezení. Obdobně skutečná intenzita osvětlení není sama o sobě odpovědí na otázku, zda je světla dostatek; záleží mimo jiné na osobě, činnosti a místě.
+
+[FIXED] `Perception` a `Preference` musí být vztahovány ke konkrétní osobě a relevantnímu `Context`. Nesmí být ukládány jako obecná vlastnost prostoru jen proto, že byly v určité situaci platné pro jednoho člověka.
+
+[FIXED] Home Cortex má využívat historii k postupnému vytváření časově a kontextově závislého modelu toho, kde se jednotlivé osoby obvykle nacházejí, jaké činnosti v daných místech a časech vykonávají a jaké podmínky jim v těchto situacích vyhovují. Tento model není pevným rozvrhem; jde o naučené vztahy s odpovídající mírou `Confidence`, které se mohou v čase měnit.
+
+Takový model může například rozlišovat, že stejná osoba preferuje jiné tepelné nebo světelné podmínky při sledování televize, po koupeli, při práci, při spánku nebo při pohybu domem. Stejně tak může zachytit rozdíly mezi jednotlivými osobami.
+
+[TODO-DESIGN] Přesný model `Perception`, `Preference`, osobního komfortu a časově-kontextových profilů bude definován samostatně. Musí být navázán na `Person`, `Activity`, `Context`, historii a `Confidence` a musí umět zachytit změnu preferencí v čase.
+
 ## Historie je součástí porozumění
 
 [FIXED] Pro Home Cortex není důležitý pouze současný stav, ale také způsob, jakým tento stav vznikl.
