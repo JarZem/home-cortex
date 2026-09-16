@@ -22,6 +22,10 @@
 
 [TODO-DESIGN] Časově ukotvený záznam skutečnosti významné pro Home Cortex. Je nutné přesně oddělit surovou událost, pozorování, odvozenou událost a změnu stavu.
 
+### Fluent
+
+[PROVISIONAL] Stav nebo vlastnost, která může platit po určitou dobu a jejíž platnost může být zahájena, změněna nebo ukončena událostmi či jinými skutečnostmi. `Fluent` umožňuje odlišit okamžik typu „něco nastalo“ od tvrzení typu „něco po určitou dobu platí“.
+
 ### Observation
 
 [PROVISIONAL] Informace o světě získaná z konkrétního `Source`. `Observation` není automaticky pravda; může mít kvalitu, nejistotu, stáří a další metadata.
@@ -29,6 +33,18 @@
 ### Evidence
 
 [PROVISIONAL] Informace použitelná pro podporu nebo oslabení určité hypotézy, odvozeného stavu nebo rozhodnutí. Jedna `Observation` může být `Evidence` pro více různých tvrzení.
+
+### Expectation
+
+[PROVISIONAL] Očekávaný současný nebo následný stav odvozený z `World Model`, známých vztahů a dostupného `Context`. `Expectation` není `Observation` a nesmí být vydávána za přímo zjištěnou skutečnost.
+
+### Prediction
+
+[PROVISIONAL] Odhad budoucího stavu nebo události a případně jejího času či časového intervalu, vytvořený na základě `World Model`, historie, současného `World State` a dalších dostupných informací. Může mít vlastní `Confidence`.
+
+### Discrepancy
+
+[PROVISIONAL] Významný rozpor mezi očekávaným stavem (`Expectation` nebo relevantní `Prediction`) a stavem vyplývajícím z `Observation`. `Discrepancy` je sama o sobě `Evidence`; její příčinou může být například neúplný model, neočekávaná podmínka, chyba měření nebo dosud neznámá skutečnost.
 
 ### Confidence
 
