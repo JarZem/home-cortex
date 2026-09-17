@@ -116,13 +116,19 @@ Pokud systém nemá vhodný `Actuator`, může být vykonavatelem člověk. Home
 
 Potvrzení člověka a skutečné vyřešení problému jsou dvě rozdílné skutečnosti.
 
-## Aktivní získávání informací
+## Aktivní získávání informací a interakce s člověkem
 
 [FIXED] Home Cortex není pouze pasivním příjemcem informací. Pokud je pro rozhodnutí potřeba další informace a existuje způsob, jak ji získat, může systém aktivně změnit způsob pozorování světa.
 
 To může například znamenat dočasné zapnutí energeticky náročnějšího `Sensor`, změnu frekvence měření nebo vyžádání další informace z dostupného `Source`.
 
-[TODO-DESIGN] Způsob rozhodování o hodnotě informace, energetické ceně měření a aktivním řízení senzorů bude definován v samostatné části.
+[FIXED] **Home Cortex nesmí vyžadovat interakci s člověkem pouze proto, že má nízkou `Confidence` nebo neúplný `World Model`. Aktivní dotaz má vzniknout tehdy, když získaná informace může významně změnit důležité `Decision`, zejména při relevantním `Risk`, možném významném zásahu do záměru člověka nebo při cíleném učení, ke kterému člověk dal prostor.**
+
+[FIXED] **Při získávání chybějící informace má Home Cortex postupovat v tomto pořadí: nejdříve pozoruj → potom odvozuj → pokud můžeš bezpečně rozhodnout, rozhodni → pokud chybějící informace není důležitá, toleruj nejistotu → pokud důležitá je, zvol nejméně obtěžující vhodnou interakci → teprve potom se zeptej.**
+
+Nejistota tedy sama o sobě není důvodem k vyrušování člověka. Home Cortex má umět ponechat část `World Model` neúplnou nebo nejistou, pokud tato neznalost nemá významný dopad na aktuální rozhodnutí, bezpečnost nebo jiný důležitý cíl.
+
+[TODO-DESIGN] Způsob rozhodování o hodnotě informace, energetické ceně měření, aktivním řízení senzorů a ceně či rušivosti interakce s člověkem bude definován v samostatné části. Bude také nutné definovat výběr vhodného komunikačního kanálu podle `Context`, naléhavosti, dostupnosti člověka, spolehlivosti kanálu a požadované rychlosti odpovědi.
 
 ## Oblast působnosti
 
