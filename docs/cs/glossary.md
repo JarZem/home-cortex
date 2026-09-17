@@ -60,7 +60,19 @@
 
 ### Actuator
 
-[PROVISIONAL] Prvek schopný na základě příkazu fyzicky nebo logicky změnit stav části světa nebo systému.
+[PROVISIONAL] Prvek schopný na základě příkazu fyzicky nebo logicky změnit stav části světa nebo systému. Samotná existence technické schopnosti neznamená oprávnění provést každou možnou změnu v libovolném `Context`.
+
+### Capability
+
+[PROVISIONAL] Technická nebo logická schopnost zařízení či jiného prvku provést určitý typ operace nebo poskytnout určitou funkci. `Capability` popisuje, co prvek umí; sama neurčuje, zda je použití této schopnosti v konkrétním `Context` přípustné nebo žádoucí.
+
+### Constraint
+
+[PROVISIONAL] Podmínka omezující nebo určující přípustnost `Action`. Může vyjadřovat zákaz, povinnost, bezpečnostní podmínku, požadovanou míru jistoty, ochranu přítomné osoby, provozní podmínku nebo jinou hranici rozhodování. Přesný model síly, priority a konfliktů `Constraint` bude definován později.
+
+### Purpose
+
+[PROVISIONAL] Důvod nebo účel, pro který je určitý stav zařízení, `Action` nebo činnost aktuálně požadována či udržována. `Purpose` umožňuje rozlišit například světlo zapnuté pro člověka od světla zapnutého pro rostliny a zabránit rozhodování pouze podle technického stavu zařízení.
 
 ### Person
 
@@ -96,7 +108,7 @@
 
 ### Action
 
-[PROVISIONAL] Konkrétní reakce iniciovaná Home Cortex, která má změnit stav, získat další informaci nebo komunikovat s člověkem či jiným systémem.
+[PROVISIONAL] Konkrétní reakce iniciovaná Home Cortex, která má změnit stav, získat další informaci nebo komunikovat s člověkem či jiným systémem. Proveditelnost `Action` vyplývá z `Capability`; její přípustnost musí být vyhodnocena také vůči relevantním `Constraint`, `Context`, `Purpose` a `Risk`.
 
 ### Task
 
@@ -112,4 +124,4 @@
 
 ## Otevřené pojmy
 
-[TODO-DESIGN] Slovník bude průběžně rozšiřován. Zejména bude potřeba přesně definovat pojmy pro prostorový model domu, zařízení, schopnosti zařízení, příkaz, původ příkazu, korelaci událostí, časovou platnost, kvalitu dat, hypotézu, odvozený stav, aktivní měření, člověkem potvrzenou pravdu, osobní časově-kontextový profil a trénovací vzorek.
+[TODO-DESIGN] Slovník bude průběžně rozšiřován. Zejména bude potřeba přesně definovat pojmy pro prostorový model domu, zařízení a jejich typy, příkaz, původ příkazu, korelaci a kauzalitu událostí, časovou platnost, kvalitu dat, hypotézu, odvozený stav, aktivní měření, člověkem potvrzenou pravdu, osobní časově-kontextový profil, prioritu a konflikt pravidel, bezpečnostní politiku a trénovací vzorek.
