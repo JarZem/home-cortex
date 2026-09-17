@@ -20,6 +20,20 @@ Aktuální vyhodnocený stav tohoto modelu označujeme jako `World State`.
 
 [FIXED] `World State` nemusí být znám s absolutní jistotou. Odvozené skutečnosti musí být možné reprezentovat spolu s jejich `Confidence`, původem a podpůrnými `Evidence`.
 
+## Target State a řízení budoucího stavu
+
+[FIXED] **Home Cortex má primárně určovat a vyhodnocovat žádoucí budoucí stavy relevantní části světa, nikoli předem definované posloupnosti akcí. `Action` je prostředkem přechodu mezi současným nebo očekávaným `World State` a přípustným `Target State`.**
+
+[FIXED] **`Target State` nemusí být jediná hodnota. Může představovat množinu přípustných stavů určenou současnými `Purpose`, `Preference`, `Constraint`, `Risk`, fyzikálními vztahy a očekávaným budoucím `Context`. Pokud existuje více přípustných stavů, Home Cortex může mezi nimi optimalizovat například spotřebu energie, náklady nebo jiné zdroje.**
+
+[FIXED] **Pokud má změna světa významnou setrvačnost nebo zpoždění, Home Cortex nesmí čekat na vznik `Discrepancy`. Musí být schopen porovnat `Prediction` budoucího `World State` s budoucím `Target State` a zahájit vhodnou `Action` s potřebným předstihem.**
+
+`Target State` tedy nemusí popisovat příkaz zařízení. Například požadavkem může být dosažení vhodných tepelných podmínek pro konkrétní osoby v očekávaném čase; zapnutí zdroje tepla, změna výkonu nebo jiná konkrétní `Action` je až prostředkem, jak tohoto stavu dosáhnout. Obdobně může být cílem přijatelná vlhkost nebo riziko kondenzace, nikoli pevně stanovená doba běhu ventilátoru.
+
+Při hledání přípustného `Target State` mohou současně působit různé a někdy konfliktní požadavky. Například tepelný stav prostoru může být ovlivněn přítomností více osob, jejich rozdílnými `Preference`, spánkem, sprchováním, přítomností zvířat, požadavky rostlin, ochranou budovy, očekávanou dobou nepřítomnosti a ekonomickými cíli. Výsledkem proto nemusí být jedna univerzální „komfortní“ nebo „úsporná“ hodnota.
+
+[TODO-DESIGN] Bude nutné přesně definovat reprezentaci `Target State`, jeho časovou platnost, toleranci a podmínky dokončení, skládání více současných požadavků, řešení konfliktů a optimalizační kritéria. Samostatně bude nutné navrhnout plánování v čase pro systémy s významnou setrvačností a možnost průběžného přepočtu plánu při změně `World State`, `Prediction` nebo `Context`.
+
 ## Očekávaný a pozorovaný svět
 
 [FIXED] **Home Cortex musí rozlišovat mezi tím, jaký stav světa očekává na základě modelu, a tím, jaký stav světa vyplývá z aktuálních `Observation`. Rozdíl mezi očekáváním a pozorováním je sám o sobě `Evidence`.**
