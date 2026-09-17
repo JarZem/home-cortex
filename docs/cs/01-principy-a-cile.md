@@ -62,6 +62,22 @@ Pravidelnost času, místa nebo opakování může být `Evidence` pro určitou 
 
 [TODO-DESIGN] Přesný model historie, neměnných `Event`, odvozených stavů, kauzálních a korelačních vztahů a možnosti zpětného přehrání (`Replay`) bude definován samostatně.
 
+## Rozhodování není mapa automatizací
+
+[FIXED] **Home Cortex nesmí být založen na předem vytvořené mapě „událost → sada podmínek → akce“. Rozhodování má vycházet z `World State`, vztahů mezi entitami, `Intent`, `Purpose`, očekávaného vývoje, podmínek dokončení, `Constraint`, `Risk` a dostupných `Evidence`. Konkrétní lidská `Activity` je zdrojem změny a očekávání v `World Model`, nikoli sama o sobě názvem automatizace.**
+
+[FIXED] **Neznámý pojem nebo `Activity` nesmí Home Cortex nutit k domýšlení chybějícího významu. Má pracovat s tím, co z informace skutečně dokáže odvodit, zachovat nejistotu a aktivně vyžádat pouze takovou chybějící informaci, která je významná pro aktuální `Decision`.**
+
+Výrok člověka proto nemusí být předem známým názvem scénáře. Například věta „jdu venčit psa“ může být užitečná i tehdy, pokud Home Cortex nepotřebuje rozumět pojmu pes ani znát konkrétní význam venčení. Následná `Observation` mohou ukázat posloupnost přesunu osoby z obýváku přes verandu ven z domu a pozdější návrat. Opakováním podobných posloupností může vznikat model očekávaného přesunu, pravděpodobného návratu a jeho časového rozložení.
+
+Takto naučené očekávání může být dále podmíněno `Context`. Doba návratu může například statisticky souviset s počasím, teplotou, deštěm, mrazem nebo jinými pozorovanými podmínkami. Tyto vztahy jsou `Evidence` pro `Prediction`; nesmějí být automaticky prohlášeny za příčinu jen na základě korelace.
+
+[FIXED] Home Cortex má při rozhodování pracovat s významem informace, který je pro dané rozhodnutí relevantní, nikoli vyžadovat úplné sémantické pochopení každého pojmu. Pokud pro bezpečné nebo významné rozhodnutí některá informace skutečně chybí, může ji aktivně získat od člověka nebo jiného `Source`.
+
+Příklad: pokud člověk oznámí záměr odejít z domu a současně probíhá pečení, nemusí být správnou reakcí troubu automaticky vypnout. Home Cortex může podle dostupného `Context`, `Purpose`, časového omezení a bezpečnostních `Constraint` ponechat stav beze změny, nebo se uživatele stručně zeptat, zda má trouba po odchodu pokračovat a případně do kdy. Stejný princip může být v budoucnu realizován hlasovým rozhraním, mobilním rozhraním, Home Assistantem nebo lokálním dotykovým panelem.
+
+[TODO-DESIGN] Bude nutné přesně definovat reprezentaci podmínek dokončení, časově platných záměrů, očekávaných přechodů mezi stavy a mechanismus, kterým Home Cortex rozhodne, zda je hodnota chybějící informace dostatečně významná pro aktivní dotaz na člověka.
+
 ## Actuator, Capability a omezení Action
 
 [FIXED] **Skutečnost, že `Actuator` technicky umožňuje určitou `Action`, neznamená, že Home Cortex smí tuto `Action` v libovolném `Context` provést. Technická `Capability` musí být oddělena od podmínek přípustnosti a bezpečnosti akce.**
