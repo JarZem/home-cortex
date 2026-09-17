@@ -28,11 +28,29 @@ Aktuální vyhodnocený stav tohoto modelu označujeme jako `World State`.
 
 [FIXED] **Pokud má změna světa významnou setrvačnost nebo zpoždění, Home Cortex nesmí čekat na vznik `Discrepancy`. Musí být schopen porovnat `Prediction` budoucího `World State` s budoucím `Target State` a zahájit vhodnou `Action` s potřebným předstihem.**
 
+[FIXED] **Existence `Discrepancy` mezi aktuálním nebo předpovězeným `World State` a `Target State` sama o sobě neopravňuje Home Cortex k okamžité kompenzační `Action`. Před reakcí musí být zohledněn `Context`, aktivní `Purpose`, příčina nebo pravděpodobná příčina odchylky, její očekávané trvání a důsledky zásahu i nečinnosti.**
+
 `Target State` tedy nemusí popisovat příkaz zařízení. Například požadavkem může být dosažení vhodných tepelných podmínek pro konkrétní osoby v očekávaném čase; zapnutí zdroje tepla, změna výkonu nebo jiná konkrétní `Action` je až prostředkem, jak tohoto stavu dosáhnout. Obdobně může být cílem přijatelná vlhkost nebo riziko kondenzace, nikoli pevně stanovená doba běhu ventilátoru.
 
 Při hledání přípustného `Target State` mohou současně působit různé a někdy konfliktní požadavky. Například tepelný stav prostoru může být ovlivněn přítomností více osob, jejich rozdílnými `Preference`, spánkem, sprchováním, přítomností zvířat, požadavky rostlin, ochranou budovy, očekávanou dobou nepřítomnosti a ekonomickými cíli. Výsledkem proto nemusí být jedna univerzální „komfortní“ nebo „úsporná“ hodnota.
 
 [TODO-DESIGN] Bude nutné přesně definovat reprezentaci `Target State`, jeho časovou platnost, toleranci a podmínky dokončení, skládání více současných požadavků, řešení konfliktů a optimalizační kritéria. Samostatně bude nutné navrhnout plánování v čase pro systémy s významnou setrvačností a možnost průběžného přepočtu plánu při změně `World State`, `Prediction` nebo `Context`.
+
+## Rozhodování mezi možnými budoucnostmi
+
+[FIXED] **Home Cortex nesmí být založen na sbírce pevných hranic pro všechny možné situace. Musí poskytovat obecný mechanismus pro porovnávání přípustných alternativních stavů, trajektorií a jejich očekávaných následků podle aktuálního `Context`, `Purpose`, `Preference`, `Constraint`, `Risk`, dostupných zdrojů a nejistoty.**
+
+[FIXED] **Při rozhodování za nejistoty nesmí Home Cortex hodnotit pouze pravděpodobnost, že se `Prediction` mýlí. Musí zohlednit také rozdílné důsledky jednotlivých možných omylů. Dvě stejně pravděpodobné chyby proto nemusí mít stejnou závažnost ani vést ke stejnému `Decision`.**
+
+[FIXED] **Home Cortex má při volbě současné `Action` zohlednit více realistických budoucích vývojů, pokud jsou pro rozhodnutí významné. Nemá slepě optimalizovat pouze nejpravděpodobnější budoucnost; má preferovat řešení, jehož očekávané důsledky jsou přijatelné napříč relevantními možnostmi a které současně co nejlépe plní platné cíle a omezení.**
+
+To umožňuje pracovat s asymetrií následků. Například malá pravděpodobnost mírně zbytečné spotřeby energie může být přijatelnější než podobně pravděpodobný, ale významný zásah do komfortu člověka; v jiné situaci může naopak dlouhodobé plýtvání převážit nad zanedbatelným rozdílem komfortu. Bezpečnostní `Constraint` přitom může některé varianty z množiny přípustných řešení úplně vyloučit, místo aby byl bezpečnostní dopad pouze další položkou v optimalizačním skóre.
+
+Hodnotící kritérium nesmí být omezeno na finanční cenu. Podle řešené oblasti mohou být relevantní například komfort, energie, náklady, čas, opotřebení zařízení, hluk, kvalita prostředí, rušivost pro člověka, spotřeba jiných zdrojů, nejistota výsledku nebo očekávaný `Risk`.
+
+Příklad: pokles teploty během úmyslného větrání není sám o sobě důvodem zvýšit výkon topení. Stejná teplotní odchylka při zavřených oknech a očekávaném příchodu člověka může mít zcela jiný význam. Rozhodující není pouze velikost odchylky, ale její příčina, účel probíhající změny, očekávané trvání a následky dostupných reakcí.
+
+[TODO-DESIGN] Bude nutné definovat obecnou reprezentaci hodnotících kritérií a jejich skládání, aniž by byl systém vázán na jednu univerzální číselnou „cenu“. Zvlášť bude nutné oddělit nepřekročitelné `Constraint`, měkké `Preference`, optimalizační cíle, toleranci, nejistotu a hodnocení následků různých trajektorií.
 
 ## Očekávaný a pozorovaný svět
 
