@@ -46,7 +46,7 @@ Takový model může například rozlišovat, že stejná osoba preferuje jiné 
 
 [TODO-DESIGN] Přesný model `Perception`, `Preference`, osobního komfortu a časově-kontextových profilů bude definován samostatně. Musí být navázán na `Person`, `Activity`, `Context`, historii a `Confidence` a musí umět zachytit změnu preferencí v čase.
 
-## Historie je součástí porozumění
+## Historie, korelace a kauzalita
 
 [FIXED] Pro Home Cortex není důležitý pouze současný stav, ale také způsob, jakým tento stav vznikl.
 
@@ -54,7 +54,33 @@ Například informace `window.bedroom = CLOSED` sama nemusí dostatečně popiso
 
 Historie proto není pouze diagnostický log. Je zdrojem `Evidence`, vysvětlení současného `World State` a budoucích trénovacích dat.
 
-[TODO-DESIGN] Přesný model historie, neměnných `Event`, odvozených stavů a možnosti zpětného přehrání (`Replay`) bude definován samostatně.
+[FIXED] **Opakovaná časová nebo statistická korelace sama o sobě nesmí vytvořit automatickou `Action`. Home Cortex se musí snažit rozpoznat podmínky, události a kauzální nebo kontextové vztahy, které pozorovanému jednání předcházejí.**
+
+Pravidelnost času, místa nebo opakování může být `Evidence` pro určitou hypotézu nebo `Context`, ale nesmí být bez dalšího zaměněna za příčinu. Pokud například osoba opakovaně přichází kolem půlnoci do ložnice a rozsvítí malou lampu, systém se nemá naučit „o půlnoci rozsvítit lampu“. Má hledat relevantní předcházející stav, například skutečný příchod osoby do ložnice, nedostatek světla, probíhající přechod ke spánku, přítomnost další spící osoby nebo jiné podmínky.
+
+[FIXED] Naučený vzorec může být podkladem pro `Prediction`, `Expectation`, zvýšení `Confidence`, aktivní získání další informace nebo vytvoření hypotézy. Samotná pravidelnost však nestačí k oprávnění fyzické automatické `Action`, pokud nejsou splněny její kontextové a bezpečnostní podmínky.
+
+[TODO-DESIGN] Přesný model historie, neměnných `Event`, odvozených stavů, kauzálních a korelačních vztahů a možnosti zpětného přehrání (`Replay`) bude definován samostatně.
+
+## Actuator, Capability a omezení Action
+
+[FIXED] **Skutečnost, že `Actuator` technicky umožňuje určitou `Action`, neznamená, že Home Cortex smí tuto `Action` v libovolném `Context` provést. Technická `Capability` musí být oddělena od podmínek přípustnosti a bezpečnosti akce.**
+
+Každý typ ovládaného zařízení musí mít popsané své obecné `Capability` a obecná pravidla či `Constraint`, která určují, za jakých okolností je konkrétní `Action` přípustná, zakázaná, povinná nebo vyžaduje další ověření. Nemá být nutné ručně vytvářet kompletní rozhodovací logiku pro každý jednotlivý kus zařízení; jednotlivé instance mají pokud možno dědit obecnou sémantiku svého typu a doplňovat pouze své specifické vlastnosti, umístění, účel a výjimky.
+
+Například světlo, kávovar, lednice, chytrá zásuvka nebo jiný spotřebič mohou mít odlišné obecné vlastnosti a omezení. Konkrétní zařízení pak může přidávat další význam – například světlo určené pro rostliny může mít jiný `Purpose` než světlo určené lidem.
+
+[FIXED] **Automatická `Action` nesmí bez dostatečného důvodu zhoršit podmínky jiné přítomné osoby nebo zmařit její zjevný či důvodně předpokládaný `Intent`.** Home Cortex proto musí před zásahem vyhodnocovat osoby a činnosti, kterých se změna dotkne, nikoli pouze osobu nebo událost, která rozhodování vyvolala.
+
+Příklad: odchod jedné osoby z kuchyně není dostatečný důvod pro zhasnutí, pokud v kuchyni zůstává jiná osoba. Naopak zhasnutí v prokazatelně prázdné místnosti může být obecně přípustné, pokud světlo nemá jiný aktivní `Purpose`, například osvětlení rostlin.
+
+[FIXED] `Constraint` může mít různou sílu. Některé podmínky pouze ovlivňují vhodnost nebo preferenci akce, jiné ji zakazují a bezpečnostní podmínky mohou určitou `Action` naopak učinit povinnou. Bezpečnostní omezení musí mít možnost mít vyšší prioritu než komfort, běžná preference nebo naučený zvyk.
+
+Příklad: pokud je žehlička napájena přes ovladatelnou chytrou zásuvku a `World Model` spolehlivě určí, že v domě nikdo není, může být pro tuto konkrétní kombinaci zařízení a zapojení definován bezpečnostní `Constraint`, podle kterého napájení žehličky nesmí zůstat zapnuté. V takovém případě nejde o naučenou preferenci, ale o povinnou bezpečnostní reakci. Přesná definice musí současně respektovat jistotu informace o nepřítomnosti a skutečnou schopnost daného `Actuator` bezpečně napájení odpojit.
+
+[FIXED] Každá významná automatická `Action` musí být před provedením vyhodnotitelná alespoň vůči své `Capability`, relevantním `Constraint`, aktuálnímu `Context`, dotčeným osobám, aktivnímu `Purpose`, známým `Risk` a požadované míře jistoty vstupních informací.
+
+[TODO-DESIGN] Bude vytvořen obecný model typů zařízení, `Capability`, `Constraint`, `Purpose`, priorit, konfliktů mezi pravidly a dědičnosti obecných pravidel do konkrétních instancí `Actuator`. Zvlášť bude nutné definovat, jak se řeší konflikt komfortu, preference, uživatelského příkazu, provozního účelu a bezpečnosti.
 
 ## Zdroje informací nejsou pouze fyzické senzory
 
