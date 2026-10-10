@@ -53,3 +53,20 @@ The CORE repository now includes portable `src/v2/ota_v2.[ch]` with this indexed
 
 ## OTA mandatory ACK after image header
 Handshake is strictly: ESP requests OTA mode → MIC replies OTA_READY(active A/B) → ESP sends image header (frame count + CRC32 + CRC8) for inactive-slot-specific build → MIC validates header and replies **ACK (0x7E)** or **NACK (0x7F)** → ESP sends DATA index 0 **only after ACK** → MIC ACK/NACK after each frame → next DATA. Invalid header must never arm data reception. Header ACK is separate from OTA_READY. No data frames may be sent before it.
+
+## OTA V2 actual firmware wiring — experimental, not hardware-verified
+Current files: `src/v2/ota_v2.[ch]` (indexed protocol), `src/v2/ota_flash_ch32.c` (real 64-byte Flash erase/program/readback, CRC32/ISO-HDLC, bounded A/B slot addresses, redundant one-byte active selector), `src/v2/mic_hw.c` (deferred OTA processing in main loop), `src/v2/core_v2.[ch]` (DMA RX decoding), `scripts/ota_selector_init.py` (one-time selector provisioning). Build target `CH32V003_CORE_V2` now includes OTA. This is experimental code: compile and hardware tests have NOT been reported yet.
+
+Actual wire sequence:
+- ESP -> MIC: `[0x42,CRC8]` (OTA request; CRC8 over 0x42).
+- MIC -> ESP: `[0x81,ACTIVE_SLOT,CRC8]`; invalid/unprovisioned selector returns NACK.
+- ESP chooses opposite slot-specific binary and sends `[0x40,COUNT_LO,COUNT_HI,CRC32_LE4,CRC8]`.
+- MIC validates COUNT 1..55 and header CRC8, then sends **single-byte ACK 0x7E** (or NACK 0x7F). No data before ACK.
+- ESP -> MIC: `[0x41,INDEX8,DATA64,CRC8]`; MIC verifies index before Flash, checks CRC8, erases/writes/verifies 64B page, responds ACK/NACK. Four consecutive CRC/write errors terminate the session. Index mismatch immediately terminates without writing. CRC32 of count*64 Flash bytes checked after last accepted page.
+- MIC commits the one-byte active selector only after full CRC32 success, then resets. The current implementation resets immediately on successful last frame; ESP should treat subsequent BOOT as confirmation, **not** expect a final ACK.
+
+Memory layout per current SENSOR linkers: A `0x08002400` 3520B (55 pages), B `0x080031C0` 3520B (55 pages). Metadata A `0x08003F80`, metadata B `0x08003FC0` (each 64B). No OTA operation may erase CORE, the active SENSOR or either metadata page except selector commit. **On a factory-blank MCU, OTA refuses to start until the selector is provisioned via SWIO**: `python3 scripts/ota_selector_init.py --slot A` produces a 64B image for address `0x08003F80` (this script does not flash hardware). Provision the corresponding A-linked SENSOR separately. The last Flash page access and write-protection settings must be verified against the exact chip/revision before flashing.
+
+Hardware checks required before deployment: compile Flash/RAM/linker map and check for overlap; actual Flash programming and readback on spare MCU; power loss during page programming and during selector commit; SWIO recovery; 1Wire timing and USART DMA, ACK timing; activation and execution of separately linked SENSOR A/B (the experimental CORE V2 still has a SENSOR stub rather than the final SENSOR dispatcher). Do not claim fully operational end-to-end OTA until these pass.
+
+Community research: WCH reference manual documents fast 64B erase/write and separate unlock of LOCK/FLOCK. The factory ROM UART loader erases *all* user Flash regardless of requested sector count (basilhussain/ch32v003-bootloader-docs), therefore cannot preserve CORE/A-B. OpenServoCore/tinyboot demonstrates a 1-wire loader fitting the 1920B system-flash area, but moving our CORE into system Flash requires option-byte/boot-path work and carries significant risk. mikrocontroller.net CH32V003 serial bootloader discussion describes a severe case of corrupted page count overwriting bootloader: strict COUNT<=55 validation is mandatory. Russian ELECTRONIX thread reports RAM-executed Flash routines freezing on CH32V003; keep the current Flash routine in CORE Flash and verify hardware rather than assuming RAM execution is safer.
