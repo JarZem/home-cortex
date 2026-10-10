@@ -40,19 +40,14 @@ mic_ota_result_t mic_ota_upload(const mic_ota_bus_t *b,
   frame[66]=crc8(frame,66);
   for(unsigned retry=0;retry<4;retry++){
    if(!send_bytes(b,frame,67))return MIC_OTA_IO;
-   if(i+1u==count){
-    /* MIC verifies CRC32, commits and resets without final ACK.
-     * A BOOT frame [0x80,status,CRC8] is the success indication. */
-    uint8_t boot[3];
-    if(!read_bytes(b,boot,3,1500))return MIC_OTA_IO;
-    if(boot[0]==0x80&&boot[2]==crc8(boot,2))return MIC_OTA_OK;
-    return MIC_OTA_PROTOCOL;
-   }
    if(!read_bytes(b,&ack,1,1000))return MIC_OTA_IO;
    if(ack==0x7e)break;
    if(ack!=0x7f)return MIC_OTA_PROTOCOL;
    if(retry==3)return MIC_OTA_RETRY_EXHAUSTED;
   }
  }
- return MIC_OTA_PROTOCOL;
+ /* After final ACK MIC resets and announces BOOT. */
+ uint8_t boot[3];
+ if(!read_bytes(b,boot,3,1500))return MIC_OTA_IO;
+ return boot[0]==0x80&&boot[2]==crc8(boot,2)?MIC_OTA_OK:MIC_OTA_PROTOCOL;
 }
